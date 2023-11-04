@@ -9,11 +9,21 @@ class TransactionType(Enum):
 
 
 class Transaction:
-    def __init__(self, transaction_id: int, date: datetime, amount: float, transaction_type: TransactionType):
-        self.Id = transaction_id
-        self.Amount = amount
-        self.Datetime = date
-        self.Type = transaction_type
+    def __init__(self, transaction_id: int, date: datetime, amount: float, transaction_type: TransactionType, idempotency_id=None):
+        self.id = transaction_id
+        self.amount = amount
+        self.datetime = date
+        self.type = transaction_type
+        self.idempotencyid = idempotency_id
+
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (self.id == other.id and
+                    abs(self.amount - other.amount) <= .001 and
+                    self.datetime == other.datetime and
+                    self.type == other.type and
+                    self.idempotencyid == other.idempotencyid)
+        return False
 
 
 class TransactionReport:

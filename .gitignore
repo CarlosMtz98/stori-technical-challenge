@@ -160,3 +160,4 @@ cython_debug/
 .idea/
 junit/test-results.xml
 .pytest_cache
+postgres-data/*
