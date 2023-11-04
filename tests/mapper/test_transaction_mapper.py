@@ -31,7 +31,7 @@ def test_transaction_mapper(session):
     idempotency_id_2 = uuid.uuid4()
 
     dml = """
-                INSERT INTO 'transaction'(id, amount, datetime, type, idempotencyId) VALUES 
+                INSERT INTO 'transaction'(id, amount, datetime, type, idempotencyid) VALUES 
                 (1, 220.00, '2023-03-19 21:57:17.525196', 'DEBIT', '{}'), 
                 (2, 32.51, '2023-10-11 10:57:17.525196', 'CREDIT', '{}')
         """.format(str(idempotency_id_1), str(idempotency_id_2))
@@ -69,6 +69,6 @@ def test_transaction_add_mapper(session):
 
     session.add(trx)
     session.commit()
-    rows = list(session.query(Transaction.idempotencyId))
+    rows = list(session.query(Transaction.idempotencyid))
     assert rows == [(idempotency_id_1,)]
 

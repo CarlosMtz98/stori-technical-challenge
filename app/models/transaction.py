@@ -14,7 +14,7 @@ class Transaction:
         self.amount = amount
         self.datetime = date
         self.type = transaction_type
-        self.idempotencyId = idempotency_id
+        self.idempotencyid = idempotency_id
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
@@ -22,7 +22,7 @@ class Transaction:
                     abs(self.amount - other.amount) <= .001 and
                     self.datetime == other.datetime and
                     self.type == other.type and
-                    self.idempotencyId == other.idempotencyId)
+                    self.idempotencyid == other.idempotencyid)
         return False
 
 
