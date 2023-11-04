@@ -5,3 +5,21 @@
 Following the [instructions](docs/instructions.md) this repository contains the solution for the Stori Technical Challenge.
 
 ### Getting Started
+
+To run the application you will need to first add the required configuration variables. 
+Said configuration cand be setup using a `.env` file. Copy the `.env.example` and replace the required environment variables
+with you own values.
+
+```bash
+cp .env.example .env.test
+```
+
+After you add the required environment variables you can start using the application
+
+### Email recipients
+The report email will be send to all the emails added to the `data/recipient/recipient_emails.csv`
+
+### Run application with docker
+```bash
+make local
+```

@@ -3,3 +3,6 @@ pytest
 ruff
 jinja2
 python-dotenv
+sqlalchemy
+psycopg2-binary
+python-json-logger

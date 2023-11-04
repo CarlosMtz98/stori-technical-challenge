@@ -1,7 +1,6 @@
-import config.logging_config
+import app.config.logging_config
 import os
 import logging
-import csv
 
 from app.repository.transaction_repository import TransactionRepository
 from app.services.transaction_service import TransactionService
@@ -26,7 +25,7 @@ if __name__ == "__main__":
     logger = logging.getLogger('app')
 
     # Create transaction repository object
-    transactions_file_location = '../data/transactions/transactions_example.csv'
+    transactions_file_location = 'data/transactions/transactions_example.csv'
     transaction_repository = TransactionRepository(transactions_file_location)
     # The data load is for reading values from a static file such as the transaction_example.csv
     transaction_repository.get_data()
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     report = transaction_service.generate_data_report()
 
     # Load recipient list
-    receivers_list = load_recipient("../data/recipient/recipient_emails.csv")
+    receivers_list = load_recipient("data/recipient/recipient_emails.csv")
 
     # Send transactions report
     transaction_service.send_transactions_report(report, receivers_list)
