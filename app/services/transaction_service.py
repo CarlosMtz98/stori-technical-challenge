@@ -15,15 +15,15 @@ class TransactionService:
 
     def generate_data_report(self):
         today = datetime.datetime.today()
-        transactions_list = self.repository.get_transactions()
+        transactions_list = self.repository.get_all()
         if len(transactions_list) == 0:
             return TransactionReport(today, 0, 0, 0, [])
 
-        credit_trx = list(filter(lambda t: t.Type == TransactionType.CREDIT,  transactions_list))
-        debit_trx = list(filter(lambda t: t.Type == TransactionType.DEBIT,  transactions_list))
+        credit_trx = list(filter(lambda t: t.type == TransactionType.CREDIT, transactions_list))
+        debit_trx = list(filter(lambda t: t.type == TransactionType.DEBIT, transactions_list))
 
-        total_debit = reduce(lambda accum, trx: accum + trx.Amount, debit_trx, 0.0)
-        total_credit = reduce(lambda accum, trx: accum + trx.Amount, credit_trx, 0.0)
+        total_debit = reduce(lambda accum, trx: accum + trx.amount, debit_trx, 0.0)
+        total_credit = reduce(lambda accum, trx: accum + trx.amount, credit_trx, 0.0)
         average_credit = total_credit / len(credit_trx)
         average_debit = total_debit / len(debit_trx)
         count_trx_by_month = self.count_transactions_by_month(transactions_list)
@@ -34,8 +34,8 @@ class TransactionService:
     def count_transactions_by_month(transactions_list: list[Transaction]):
         trx_year = {}
         for trx in transactions_list:
-            year = trx.Datetime.year
-            month = trx.Datetime.month
+            year = trx.datetime.year
+            month = trx.datetime.month
             if year not in trx_year:
                 trx_year[year] = {}
             if month not in trx_year[year]:

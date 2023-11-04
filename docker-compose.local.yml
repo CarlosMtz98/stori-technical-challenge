@@ -1,0 +1,31 @@
+version: "3.8"
+
+volumes:
+  postgres-data:
+services:
+  app:
+    container_name: stori-email-worker
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - database
+    command: python ./start.py
+
+  database:
+    container_name: stori-ledger-database
+    image: postgres:13
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./database/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+

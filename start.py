@@ -1,7 +1,12 @@
+from sqlalchemy.orm import sessionmaker
+
 import app.config.logging_config
 import os
 import logging
 
+from sqlalchemy import create_engine
+
+from app.orm.mapper import start_mapping
 from app.repository.transaction_repository import TransactionRepository
 from app.services.transaction_service import TransactionService
 from dotenv import load_dotenv
@@ -24,11 +29,24 @@ if __name__ == "__main__":
     load_dotenv()
     logger = logging.getLogger('app')
 
+    # ConnectIo to the database
+    db_user = os.environ.get("POSTGRES_USER")
+    db_password = os.environ.get("POSTGRES_PASSWORD")
+    db_host = os.environ.get("DB_HOST")
+    db_port = os.environ.get("DB_PORT")
+    db_name = os.environ.get("POSTGRES_DB")
+    db_string = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+    db_engine = create_engine(db_string)
+
+    start_mapping()
+    db_session = sessionmaker(bind=db_engine)
+    session = db_session()
+
     # Create transaction repository object
     transactions_file_location = 'data/transactions/transactions_example.csv'
-    transaction_repository = TransactionRepository(transactions_file_location)
+    transaction_repository = TransactionRepository(session, transactions_file_location)
     # The data load is for reading values from a static file such as the transaction_example.csv
-    transaction_repository.get_data()
+    # transaction_repository.load_static_data()
 
     # Load mail configuration
     sender_email = os.environ.get("SENDER_EMAIL")

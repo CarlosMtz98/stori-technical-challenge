@@ -2,15 +2,17 @@ import string
 from datetime import datetime
 
 from app.models.transaction import Transaction, TransactionType
+from app.repository.repository_interface import IRepository
 from app.utils.file_reader.csv_file_reader import CSVFileReader
 
 
-class TransactionRepository:
-    def __init__(self, directory_path):
+class TransactionRepository(IRepository):
+    def __init__(self, database_session, directory_path):
+        self.session = database_session,
         self.directory_path = directory_path
-        self.transactions = []
+        self.transactions = {}
 
-    def get_data(self):
+    def load_static_data(self):
         reader = CSVFileReader(self.directory_path)
         data = reader.read_csv_as_dict()
         for item in data:
@@ -21,14 +23,29 @@ class TransactionRepository:
             type_symbol = amount_with_type[0]
             transaction_type = self.get_transaction_type(type_symbol)
             amount = float(amount_with_type[1::])
-            self.transactions.append(Transaction(id, date, amount, transaction_type))
+            if not self.get_by_id(id):
+                self.transactions[id] = Transaction(id, date, amount, transaction_type)
 
-    def get_transactions(self):
-        return self.transactions
+    def get_by_id(self, id):
+        if id not in self.transactions:
+            return None
+        return self.transactions[id]
+
+    def get_all(self):
+        return self.session[0].query(Transaction).all()
 
     @staticmethod
     def get_transaction_type(symbol: string) -> TransactionType:
-        if symbol == '+':
-            return TransactionType.DEBIT
         if symbol == '-':
+            return TransactionType.DEBIT
+        if symbol == '+':
             return TransactionType.CREDIT
+
+    def create(self, item):
+        pass
+
+    def update(self, item):
+        pass
+
+    def delete(self, id):
+        pass
