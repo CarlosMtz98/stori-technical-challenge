@@ -16,11 +16,11 @@ from app.utils.file_reader.csv_file_reader import CSVFileReader
 
 
 def load_recipient(file_location):
-    recipient_list = []
+    recipient_list = set()
     reader = CSVFileReader(file_location)
     data = reader.read_csv_as_dict()
     for item in data:
-        recipient_list.append(item.get("email"))
+        recipient_list.add(item.get("email"))
 
     return recipient_list
 
@@ -32,11 +32,11 @@ if __name__ == "__main__":
     # ConnectIo to the database
     db_user = os.environ.get("POSTGRES_USER")
     db_password = os.environ.get("POSTGRES_PASSWORD")
-    db_host = os.environ.get("DB_HOST")
+    db_host = os.environ.get("DB_HOST") if os.environ.get("DB_HOST") else "127.0.0.1"
     db_port = os.environ.get("DB_PORT")
     db_name = os.environ.get("POSTGRES_DB")
-    db_string = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
-    db_engine = create_engine(db_string)
+    db_connection_string = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+    db_engine = create_engine(db_connection_string)
 
     start_mapping()
     db_session = sessionmaker(bind=db_engine)
