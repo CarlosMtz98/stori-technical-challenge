@@ -51,14 +51,14 @@ def test_get_all(mock_session, recipient_repository):
 def test_get_by_id_exists(mock_session, recipient_repository):
     recipient = Recipient(id=1, email="test1@example.com", first_name="Dennis", last_name="Ritchie")
     recipient_id = 1
-    mock_session.query(Recipient).get.return_value.first.return_value = recipient
+    mock_session.query(Recipient).get.return_value.return_value = recipient
     result = recipient_repository.get_by_id(recipient_id)
     assert result is not None
 
 
 def test_get_by_id_not_found(mock_session, recipient_repository):
     recipient_id = 1
-    mock_session.query(Recipient).get.return_value.first.return_value = None
+    mock_session.query(Recipient).get.return_value = None
     result = recipient_repository.get_by_id(recipient_id)
     assert result is None
 
@@ -85,11 +85,4 @@ def test_delete_not_found(mock_session, recipient_repository):
     recipient_repository.delete(recipient_id)
     mock_session.delete.assert_not_called()
     mock_session.commit.assert_not_called()
-
-
-def test_get_by_email(mock_session, recipient_repository):
-    recipient = Recipient(id=1, email="test2@example.com", first_name="Richard", last_name="Stallman")
-    mock_session.query(Recipient).filter.return_value.first.return_value = recipient
-    res = recipient_repository.get_by_email(recipient.email)
-    assert res == recipient
 

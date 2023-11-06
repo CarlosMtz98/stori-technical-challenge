@@ -1,5 +1,5 @@
 class Recipient:
-    def __init__(self, id, email, first_name, last_name):
+    def __init__(self, email, id=None, first_name=None, last_name=None):
         self.id = id
         self.email = email
         self.first_name = first_name

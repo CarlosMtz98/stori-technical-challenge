@@ -11,10 +11,10 @@ class RecipientRepository(IRepository):
         return self.session.query(Recipient).all()
 
     def get_by_id(self, id):
-        return self.session.query(Recipient).get(id).first()
+        return self.session.query(Recipient).get(id)
 
     def get_by_email(self, email):
-        return self.session.query(Recipient).filter(email == email).first()
+        return self.session.query(Recipient).filter(Recipient.email == email).first()
 
     def create(self, recipient):
         if recipient and is_valid_email(recipient.email) and not self.get_by_email(recipient.email):
