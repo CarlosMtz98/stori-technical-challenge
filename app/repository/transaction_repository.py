@@ -42,10 +42,15 @@ class TransactionRepository(IRepository):
             return TransactionType.CREDIT
 
     def create(self, item):
-        pass
+        self.session.add(item)
+        self.session.commit()
 
     def update(self, item):
-        pass
+        self.session.merge(item)
+        self.session.commit()
 
     def delete(self, id):
-        pass
+        transaction = self.get_by_id(id)
+        if transaction:
+            self.session.delete(transaction)
+            self.session.commit()

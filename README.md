@@ -1,4 +1,4 @@
-## Stori Technical Chanllenge
+## Stori Technical Challenge
 
 ### Description
 
@@ -17,7 +17,7 @@ cp .env.example .env.test
 After you add the required environment variables you can start using the application
 
 ### Email recipients
-The report email will be send to all the emails added to the `data/recipient/recipient_emails.csv`
+The report email will be sent to all the emails added to the `data/recipient/recipient_emails.csv`
 
 ### Run application with docker
 ```bash
