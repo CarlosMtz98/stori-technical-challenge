@@ -1,7 +1,14 @@
-CREATE TABLE Transaction (
-    Id SERIAL PRIMARY KEY,
-    Datetime TIMESTAMP NOT NULL,
-    Amount NUMERIC(10, 2) NOT NULL,
-    Type VARCHAR NOT NULL ,
-    IdempotencyId UUID
+CREATE TABLE IF NOT EXISTS transaction (
+    id SERIAL PRIMARY KEY,
+    datetime TIMESTAMP NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    type VARCHAR NOT NULL ,
+    idempotency_id UUID
+);
+
+CREATE TABLE IF NOT EXISTS recipient (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL
 );

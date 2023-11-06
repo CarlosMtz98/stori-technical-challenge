@@ -7,6 +7,7 @@ import logging
 from sqlalchemy import create_engine
 
 from app.orm.mapper import start_mapping
+from app.repository.recipient_repository import RecipientRepository
 from app.repository.transaction_repository import TransactionRepository
 from app.services.transaction_service import TransactionService
 from dotenv import load_dotenv
@@ -45,8 +46,9 @@ if __name__ == "__main__":
     # Create transaction repository object
     transactions_file_location = 'data/transactions/transactions_example.csv'
     transaction_repository = TransactionRepository(session, transactions_file_location)
-    # The data load is for reading values from a static file such as the transaction_example.csv
-    # transaction_repository.load_static_data()
+
+    # Create recipient repository
+    recipient_repository = RecipientRepository(session)
 
     # Load mail configuration
     sender_email = os.environ.get("SENDER_EMAIL")
@@ -64,7 +66,7 @@ if __name__ == "__main__":
     report = transaction_service.generate_data_report()
 
     # Load recipient list
-    receivers_list = load_recipient("data/recipient/recipient_emails.csv")
+    receivers_list = [recipient.email for recipient in recipient_repository.get_all()]
 
     # Send transactions report
     transaction_service.send_transactions_report(report, receivers_list)
