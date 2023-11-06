@@ -11,7 +11,7 @@ Said configuration cand be setup using a `.env` file. Copy the `.env.example` an
 with you own values.
 
 ```bash
-cp .env.example .env.test
+cp .env.example .env
 ```
 
 After you add the required environment variables you can start using the application
