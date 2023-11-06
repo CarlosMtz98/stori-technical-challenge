@@ -74,15 +74,16 @@ def test_transaction_add_mapper(session):
     assert rows == [(idempotency_id_1,)]
 
 
-
 def test_recipient_mapper(session):
     dml = """
         INSERT INTO recipient(email, first_name, last_name) VALUES 
-        ('test@domain.com', 'Greg', 'Roberts')
+        ('test@domain.com', 'Greg', 'Roberts'),
+        ('test2@domain.com', NULL, NULL)
     """
     session.execute(text(dml))
     expected = [
-        Recipient(1, 'test@domain.com', 'Greg', 'Roberts')
+        Recipient(email='test@domain.com', id=1, first_name='Greg', last_name='Roberts'),
+        Recipient(email='test2@domain.com', id=2)
     ]
     res = session.query(Recipient).all()
 

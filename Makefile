@@ -1,6 +1,6 @@
 local:
 	echo "Starting local environment with docker"
-	docker-compose -f docker-compose.local.yml up --build
+	docker-compose -f docker-compose.local.yml run --build --rm app
 
 init:
 	pip install -r requirements.txt

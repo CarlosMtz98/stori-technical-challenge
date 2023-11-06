@@ -6,6 +6,7 @@ import logging
 
 from sqlalchemy import create_engine
 
+from app.models.recipient import Recipient
 from app.orm.mapper import start_mapping
 from app.repository.recipient_repository import RecipientRepository
 from app.repository.transaction_repository import TransactionRepository
@@ -64,9 +65,36 @@ if __name__ == "__main__":
 
     # Generate transactions report
     report = transaction_service.generate_data_report()
+    # Main menu
+    while True:
+        print("\nMain Menu:")
+        print("1. Send email report")
+        print("2. Add an email")
+        print("3. Remove an email")
+        print("4. Show recipients email list4")
+        print("5. Exit")
 
-    # Load recipient list
-    receivers_list = [recipient.email for recipient in recipient_repository.get_all()]
+        choice = input("Enter your choice: ")
 
-    # Send transactions report
-    transaction_service.send_transactions_report(report, receivers_list)
+        if choice == "1":
+            receivers_list = [recipient.email for recipient in recipient_repository.get_all()]
+            transaction_service.send_transactions_report(report, receivers_list)
+        elif choice == "2":
+            email = input("Enter the email to add: ")
+            new_recipient = Recipient(email)
+            recipient_repository.create(new_recipient)
+        elif choice == "3":
+            email = input("Enter the email to remove: ")
+            recipient = recipient_repository.get_by_email(email)
+            if not recipient:
+                print(f"Recipient with email [{email}] not found")
+            else:
+                recipient_repository.delete(recipient.id)
+        elif choice == "4":
+            receivers_list = [recipient.email for recipient in recipient_repository.get_all()]
+            print(f'Recipients emails list: {", ".join(receivers_list)}')
+        elif choice == "5":
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
